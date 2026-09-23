@@ -56,6 +56,7 @@ public sealed class FrameInterpolationController : ControllerBase
 			Enabled = pluginConfiguration.Enabled,
 			DefaultProfileId = pluginConfiguration.DefaultProfileId,
 			OutputEncoderMode = pluginConfiguration.OutputEncoderMode,
+			OutputScaleHeight = pluginConfiguration.OutputScaleHeight,
 			HudMode = pluginConfiguration.HudMode,
 			HudPosition = pluginConfiguration.HudPosition,
 			HudSeconds = pluginConfiguration.HudSeconds,

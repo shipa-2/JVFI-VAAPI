@@ -52,6 +52,9 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 	/// <summary>Gets or sets the output video encoder selection policy.</summary>
 	public OutputEncoderMode OutputEncoderMode { get; set; }
 
+	/// <summary>Gets or sets an optional VAAPI upscale target height. Zero disables upscaling.</summary>
+	public int OutputScaleHeight { get; set; }
+
 	/// <summary>Gets or sets the HUD mode.</summary>
 	public HudMode HudMode { get; set; }
 
@@ -102,6 +105,7 @@ public sealed class PluginConfiguration : BasePluginConfiguration
 		InterfaceLanguage = "zh-TW";
 		DefaultProfileId = "auto60";
 		OutputEncoderMode = OutputEncoderMode.AutoHardware;
+		OutputScaleHeight = 0;
 		HudMode = HudMode.FirstSeconds;
 		HudPosition = HudPosition.TopLeft;
 		HudDetailMode = HudDetailMode.Compact;

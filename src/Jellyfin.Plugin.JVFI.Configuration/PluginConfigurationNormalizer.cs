@@ -38,6 +38,12 @@ public static class PluginConfigurationNormalizer
 			config.DefaultProfileId = "auto60";
 			result = true;
 		}
+		int[] allowedScaleHeights = new int[5] { 0, 720, 1080, 1440, 2160 };
+		if (!allowedScaleHeights.Contains(config.OutputScaleHeight))
+		{
+			config.OutputScaleHeight = 0;
+			result = true;
+		}
 		int num = ((config.ConcurrentViewingUserLimit <= 0) ? 2 : Math.Clamp(config.ConcurrentViewingUserLimit, 1, 100));
 		if (config.ConcurrentViewingUserLimit != num)
 		{

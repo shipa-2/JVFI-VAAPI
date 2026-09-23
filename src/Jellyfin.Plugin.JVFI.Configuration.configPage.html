@@ -252,6 +252,18 @@
                                 <div class="fieldDescription">自動模式會優先保留Jellyfin已選好的硬體編碼；若Jellyfin目前使用軟體編碼，才由JVFI自動判斷。</div>
                             </div>
 
+                            <div class="selectContainer">
+                                <label class="selectLabel" for="OutputScaleHeight">VAAPI 輸出放大</label>
+                                <select is="emby-select" id="OutputScaleHeight" name="OutputScaleHeight" class="emby-select-withcolor emby-select">
+                                    <option value="0">關閉</option>
+                                    <option value="720">720p</option>
+                                    <option value="1080">1080p</option>
+                                    <option value="1440">1440p</option>
+                                    <option value="2160">2160p (4K)</option>
+                                </select>
+                                <div class="fieldDescription">只放大小於所選高度的影片；補幀後由 VAAPI 縮放。這是傳統硬體縮放，不是 AI / RTX VSR。</div>
+                            </div>
+
                             <div class="inputContainer">
                                 <label class="inputLabel inputLabelUnfocused" for="Minimum480pBitrateMbps">480p60 最低輸出位元率（Mbps）</label>
                                 <input id="Minimum480pBitrateMbps" name="Minimum480pBitrateMbps" type="number" is="emby-input" min="0" max="50" step="1" />
@@ -349,6 +361,7 @@
                     '啟用伺服器端補幀控制':'Enable server-side frame interpolation','啟用後會關閉影片直接播放，改由 Jellyfin 即時轉碼並加入補幀濾鏡。':'When enabled, video direct play is replaced by Jellyfin transcoding with JVFI interpolation.','同時觀看上限':'Concurrent viewing limit','限制同時可啟用補幀的播放視窗數。':'Limit the number of playback sessions that can use frame interpolation at the same time.','套用使用者':'Users','選擇要啟用補幀的 Jellyfin 使用者；每位使用者可再個別選擇要套用補幀的媒體庫。':'Select the Jellyfin users who can use frame interpolation. Each user can choose their own libraries.','套用媒體庫':'Libraries','正在載入使用者。':'Loading users.',
                     '預設補幀模式':'Interpolation mode','JVFI 自訂 FPS':'JVFI custom FPS','目標輸出幀率（FPS）':'Target output frame rate (FPS)','可自訂 23.976–240 FPS，預設 60；常用值包含 48、50、59.94、60、90、120 與 144。提高幀率會明顯增加轉碼負載。':'Custom range: 23.976–240 FPS; default: 60. Higher rates significantly increase transcoding load.','關閉':'Off','輸出編碼器':'Output encoder','自動模式':'Auto mode','跟隨 Jellyfin':'Follow Jellyfin','CPU 純軟體':'CPU software',
                     '自動模式會優先保留Jellyfin已選好的硬體編碼；若Jellyfin目前使用軟體編碼，才由JVFI自動判斷。':'Auto mode keeps the hardware encoder already selected by Jellyfin. If Jellyfin is currently using software encoding, JVFI chooses the hardware automatically.',
+                    'VAAPI 輸出放大':'VAAPI output upscale','只放大小於所選高度的影片；補幀後由 VAAPI 縮放。這是傳統硬體縮放，不是 AI / RTX VSR。':'Only videos below the selected height are enlarged. VAAPI scaling runs after interpolation. This is conventional hardware scaling, not AI / RTX VSR.',
                     '已選擇 {selected} / {total} 個媒體庫':'Selected {selected} of {total} libraries','點擊選擇媒體庫':'Click to select libraries','目前沒有可選的媒體庫。':'No selectable libraries were found.','媒體庫清單載入失敗；本次儲存不會改變既有媒體庫選擇。':'Failed to load libraries; saving will preserve the existing library selection.','路徑未提供':'Path unavailable','未命名媒體庫':'Unnamed library',
                     '播放畫面狀態顯示':'Playback HUD','狀態顯示方式':'HUD mode','只顯示前幾秒':'First seconds only','播放時一直顯示':'Always','只顯示降級或錯誤':'Warnings only',
                     '狀態顯示位置':'HUD position','左上角':'Top left','右上角':'Top right','左下角':'Bottom left','右下角':'Bottom right','顯示內容':'HUD detail',
@@ -360,6 +373,7 @@
                     '啟用伺服器端補幀控制':'サーバー側フレーム補間を有効化','啟用後會關閉影片直接播放，改由 Jellyfin 即時轉碼並加入補幀濾鏡。':'有効にするとダイレクト再生を使用せず、Jellyfin のリアルタイム変換に JVFI 補間を追加します。','同時觀看上限':'同時視聴上限','限制同時可啟用補幀的播放視窗數。':'同時にフレーム補間を有効にできる再生セッション数を制限します。','套用使用者':'対象ユーザー','選擇要啟用補幀的 Jellyfin 使用者；每位使用者可再個別選擇要套用補幀的媒體庫。':'フレーム補間を有効にする Jellyfin ユーザーを選択します。ユーザーごとに対象ライブラリを個別に選択できます。','套用媒體庫':'対象ライブラリ','正在載入使用者。':'ユーザーを読み込み中。',
                     '預設補幀模式':'補間モード','JVFI 自訂 FPS':'JVFI カスタム FPS','目標輸出幀率（FPS）':'目標出力フレームレート（FPS）','可自訂 23.976–240 FPS，預設 60；常用值包含 48、50、59.94、60、90、120 與 144。提高幀率會明顯增加轉碼負載。':'23.976～240 FPS の範囲で設定できます。既定値は 60 です。高い値ほど変換負荷が大幅に増加します。','關閉':'オフ','輸出編碼器':'出力エンコーダー','自動模式':'自動モード','跟隨 Jellyfin':'Jellyfin に従う','CPU 純軟體':'CPU ソフトウェア',
                     '自動模式會優先保留Jellyfin已選好的硬體編碼；若Jellyfin目前使用軟體編碼，才由JVFI自動判斷。':'自動モードでは、Jellyfin が選択済みのハードウェアエンコーダーを優先して維持します。Jellyfin が現在ソフトウェアエンコードを使用している場合のみ、JVFI がハードウェアを自動判定します。',
+                    'VAAPI 輸出放大':'VAAPI 出力アップスケール','只放大小於所選高度的影片；補幀後由 VAAPI 縮放。這是傳統硬體縮放，不是 AI / RTX VSR。':'選択した高さ未満の動画だけを拡大します。補間後に VAAPI で拡大します。AI / RTX VSR ではなく通常のハードウェアスケーリングです。',
                     '已選擇 {selected} / {total} 個媒體庫':'{total} 個中 {selected} 個のライブラリを選択','點擊選擇媒體庫':'クリックしてライブラリを選択','目前沒有可選的媒體庫。':'選択できるライブラリがありません。','媒體庫清單載入失敗；本次儲存不會改變既有媒體庫選擇。':'ライブラリ一覧を取得できませんでした。今回の保存では既存の選択を維持します。','路徑未提供':'パス情報なし','未命名媒體庫':'名称なしライブラリ',
                     '播放畫面狀態顯示':'再生 HUD','狀態顯示方式':'HUD 表示','只顯示前幾秒':'最初の数秒のみ','播放時一直顯示':'常に表示','只顯示降級或錯誤':'警告のみ',
                     '狀態顯示位置':'HUD 位置','左上角':'左上','右上角':'右上','左下角':'左下','右下角':'右下','顯示內容':'表示内容',
@@ -590,6 +604,7 @@
                 var targetProfile = (config.Profiles || []).find(function (profile) { return profile.Id === 'auto60'; });
                 document.querySelector('#TargetFps').value = targetProfile && typeof targetProfile.TargetFps === 'number' ? targetProfile.TargetFps : 60;
                 document.querySelector('#OutputEncoderMode').value = jvfiEncoderMode(config.OutputEncoderMode);
+                document.querySelector('#OutputScaleHeight').value = [720, 1080, 1440, 2160].indexOf(config.OutputScaleHeight) >= 0 ? String(config.OutputScaleHeight) : '0';
                 document.querySelector('#HudMode').value = jvfiHudMode(config.HudMode);
                 document.querySelector('#HudPosition').value = jvfiHudPosition(config.HudPosition);
                 document.querySelector('#HudDetailMode').value = jvfiHudDetailMode(config.HudDetailMode);
@@ -617,6 +632,7 @@
                     targetProfile.Name = 'JVFI Custom FPS';
                 }
                 config.OutputEncoderMode = document.querySelector('#OutputEncoderMode').value;
+                config.OutputScaleHeight = parseInt(document.querySelector('#OutputScaleHeight').value, 10) || 0;
                 config.HudMode = document.querySelector('#HudMode').value;
                 config.HudPosition = document.querySelector('#HudPosition').value;
                 config.HudDetailMode = document.querySelector('#HudDetailMode').value;

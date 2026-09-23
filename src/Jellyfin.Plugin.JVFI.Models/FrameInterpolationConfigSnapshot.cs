@@ -19,6 +19,9 @@ public sealed class FrameInterpolationConfigSnapshot
 	/// <summary>Gets or sets the output encoder selection policy.</summary>
 	public OutputEncoderMode OutputEncoderMode { get; set; }
 
+	/// <summary>Gets or sets the optional VAAPI upscale target height.</summary>
+	public int OutputScaleHeight { get; set; }
+
 	/// <summary>Gets or sets the interpolation quality and performance mode.</summary>
 	/// <summary>Gets or sets the HUD mode.</summary>
 	public HudMode HudMode { get; set; }

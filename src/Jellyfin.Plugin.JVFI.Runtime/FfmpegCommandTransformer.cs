@@ -35,6 +35,12 @@ public static partial class FfmpegCommandTransformer
 		{
 			commandLine2 = EnsureSoftwareDecodePipeline(commandLine2);
 		}
+		else if (outputEncoderSelection.Pipeline == HardwarePipeline.Vaapi &&
+			hardwarePipeline == HardwarePipeline.Vaapi &&
+			UsesSoftwareInterpolation(request.Backend))
+		{
+			commandLine2 = EnsureCpuDecodeForVaapiInterpolation(commandLine2);
+		}
 
 		commandLine2 = EnsureFilterHwDeviceForVaapiFilters(commandLine2);
 		commandLine2 = EnsureNamedVaapiDecodeDevice(commandLine2);
@@ -150,6 +156,12 @@ public static partial class FfmpegCommandTransformer
 				{
 					list.Add(hardwareUpload);
 				}
+			}
+			if (outputPipeline == HardwarePipeline.Vaapi &&
+				request.OutputScaleHeight > request.SourceHeight &&
+				request.SourceHeight > 0)
+			{
+				list.Add($"scale_vaapi=w=-2:h={request.OutputScaleHeight}:format=nv12");
 			}
 		}
 		return string.Join(',', list);
@@ -527,6 +539,22 @@ public static partial class FfmpegCommandTransformer
 		return text;
 	}
 
+	/// <summary>
+	/// Tonga cannot reliably round-trip decoded VAAPI surfaces through CPU interpolation and
+	/// back into VCE. Keep the named VAAPI device for upload/encode, but decode and filter on CPU.
+	/// </summary>
+	private static string EnsureCpuDecodeForVaapiInterpolation(string commandLine)
+	{
+		string text = commandLine;
+		text = Regex.Replace(text, "-hwaccel\\s+vaapi\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "-hwaccel_device\\s+\\S+\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "-hwaccel_output_format\\s+vaapi\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "-init_hw_device\\s+vulkan=vk@dr\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "scale_vaapi=format=nv12", "format=yuv420p", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "scale_vaapi=[^,\"]+", "format=yuv420p", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		return text;
+	}
+
 	private static string EnsureMinimum4KBitrate(string commandLine, FfmpegTransformRequest request, string outputEncoder)
 	{
 		if (request.TargetFps < 50.0 || request.SourceWidth <= 0 || !outputEncoder.StartsWith("h264", StringComparison.OrdinalIgnoreCase))
@@ -534,6 +562,14 @@ public static partial class FfmpegCommandTransformer
 			return commandLine;
 		}
 		int num = ((request.MaxWidth > 0) ? Math.Min(request.SourceWidth, request.MaxWidth) : request.SourceWidth);
+		if (request.OutputScaleHeight > request.SourceHeight && request.SourceHeight > 0)
+		{
+			num = (int)Math.Round((double)request.SourceWidth * request.OutputScaleHeight / request.SourceHeight);
+			if ((num & 1) != 0)
+			{
+				num++;
+			}
+		}
 		int num2;
 		if (num <= 1280)
 		{

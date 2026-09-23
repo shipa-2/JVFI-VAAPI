@@ -214,7 +214,7 @@ public static class JVFIPatch
 			int minimum4KBitrateMbps = pluginConfiguration.Minimum4KBitrateMbps;
 			InterpolationBackend recommendedBackend = _capabilities.Current.RecommendedBackend;
 			MediaStream videoStream4 = ((EncodingJobInfo)state).VideoStream;
-			FfmpegTransformRequest ffmpegTransformRequest = new FfmpegTransformRequest(targetFps, maxWidth, hudTextFile, showHud, hudPosition, hudSeconds, outputEncoderMode, jellyfinHardwarePipeline, quality, valueOrDefault, valueOrDefault2, minimum480pBitrateMbps, minimum720pBitrateMbps, minimum1080pBitrateMbps, minimum4KBitrateMbps, metricsFile, recommendedBackend, ((videoStream4 != null) ? videoStream4.PixelFormat : null) ?? string.Empty, IsProtectedHdrOrDolbyVision(((EncodingJobInfo)state).VideoStream), progressFile, GetJellyfinQsvDevice());
+			FfmpegTransformRequest ffmpegTransformRequest = new FfmpegTransformRequest(targetFps, maxWidth, hudTextFile, showHud, hudPosition, hudSeconds, outputEncoderMode, jellyfinHardwarePipeline, quality, valueOrDefault, valueOrDefault2, minimum480pBitrateMbps, minimum720pBitrateMbps, minimum1080pBitrateMbps, minimum4KBitrateMbps, metricsFile, recommendedBackend, ((videoStream4 != null) ? videoStream4.PixelFormat : null) ?? string.Empty, IsProtectedHdrOrDolbyVision(((EncodingJobInfo)state).VideoStream), progressFile, GetJellyfinQsvDevice(), pluginConfiguration.OutputScaleHeight);
 			FfmpegTransformResult ffmpegTransformResult = FfmpegCommandTransformer.Transform(commandLineArguments, ffmpegTransformRequest);
 			if (!ffmpegTransformResult.Applied)
 			{
