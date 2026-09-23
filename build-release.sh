@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
-VERSION="${1:-0.7.6.1}"
+VERSION="${1:-0.7.6.2}"
 ZIP="$ROOT/jellyfin-video-frame-interpolation_${VERSION}.zip"
+OUT="$ROOT/src/bin/Release/net10.0"
 
-dotnet publish "$ROOT/src/Jellyfin Video Frame Interpolation.csproj" -c Release -o "$ROOT/dist"
+dotnet build "$ROOT/src/Jellyfin Video Frame Interpolation.csproj" -c Release
+
+rm -rf "$ROOT/dist"
+mkdir -p "$ROOT/dist"
+cp "$OUT/Jellyfin Video Frame Interpolation.dll" "$OUT/Jellyfin Video Frame Interpolation.deps.json" "$ROOT/dist/"
 cp "$ROOT/packaging/meta.json" "$ROOT/dist/meta.json"
+
+if [[ -f "$ROOT/dist/0Harmony.dll" ]]; then
+  echo "ERROR: 0Harmony.dll must be embedded (Costura), not shipped separately." >&2
+  exit 1
+fi
+
 (
   cd "$ROOT/dist"
   zip -r "$ZIP" . -x '*.pdb'

@@ -1,6 +1,6 @@
 {
   "category": "General",
-  "changelog": "JVFI-VAAPI 0.7.6.1：修正 Jellyfin 12 VAAPI 路徑（filter_hw_device vk→va），避免 h264_vaapi + hwupload 失敗（FFmpeg 218）。基於 JVFI 0.7.6.0。",
+  "changelog": "JVFI-VAAPI 0.7.6.2：將 0Harmony 嵌入插件 DLL，修正 Jellyfin 12 collectible 載入導致 Harmony 掛接失敗；含 0.7.6.1 VAAPI 修正。",
   "description": "JVFI-VAAPI：Jellyfin 伺服器端即時補幀，VAAPI / Jellyfin 12 修正版。",
   "guid": "b8d11789-88f4-4230-befd-9550952780ec",
   "name": "Jellyfin Video Frame Interpolation",
@@ -8,7 +8,7 @@
   "owner": "shipa-2",
   "targetAbi": "12.1.0.0",
   "timestamp": "2026-09-23T18:45:00+00:00",
-  "version": "0.7.6.1",
+  "version": "0.7.6.2",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": []
