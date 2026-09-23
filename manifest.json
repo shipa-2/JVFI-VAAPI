@@ -9,6 +9,14 @@
     "imageUrl": "https://shipa-2.github.io/JVFI-VAAPI/assets/jvfi-icon.png",
     "versions": [
       {
+        "version": "0.7.6.4",
+        "changelog": "framerate 後強制 NV12，改用命名 VAAPI 裝置與通用 hwupload，修正 AMD Tonga invalid VASurfaceID。",
+        "targetAbi": "12.1.0.0",
+        "sourceUrl": "https://github.com/shipa-2/JVFI-VAAPI/releases/download/v0.7.6.4/jellyfin-video-frame-interpolation_0.7.6.4.zip",
+        "checksum": "C2643A00FE6201E76D5F0F77856E407D",
+        "timestamp": "2026-09-23T20:05:00Z"
+      },
+      {
         "version": "0.7.6.3",
         "changelog": "Software 編碼器：純 CPU 解碼路徑，避免 AMD amdgpu context lost；VAAPI 編碼 hwupload_vaapi；filter_hw_device vk→va 用於所有 VAAPI 濾鏡。",
         "targetAbi": "12.1.0.0",

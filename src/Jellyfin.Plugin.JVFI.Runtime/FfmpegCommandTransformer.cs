@@ -37,6 +37,7 @@ public static partial class FfmpegCommandTransformer
 		}
 
 		commandLine2 = EnsureFilterHwDeviceForVaapiFilters(commandLine2);
+		commandLine2 = EnsureNamedVaapiDecodeDevice(commandLine2);
 		commandLine2 = EnsureMinimum4KBitrate(commandLine2, request, outputEncoderSelection.Encoder);
 		if (!TryBuildInterpolationFilter(commandLine2, request, hardwarePipeline, out string _, out string reason))
 		{
@@ -124,6 +125,12 @@ public static partial class FfmpegCommandTransformer
 			list.Add(string.Create(invariantCulture, ref handler));
 		}
 		list.Add(filter);
+		if (flag2)
+		{
+			// Software interpolation filters negotiate their own output format. Do not assume
+			// the pre-filter NV12 format survived; Tonga VCE requires an explicit NV12 surface.
+			left = null;
+		}
 		if (request.ShowHud && !string.IsNullOrWhiteSpace(request.HudTextFile))
 		{
 			list.Add(BuildDrawText(request));
@@ -432,7 +439,7 @@ public static partial class FfmpegCommandTransformer
 		case HardwarePipeline.Cuda:
 			return "hwupload_cuda";
 		case HardwarePipeline.Vaapi:
-			return "hwupload_vaapi";
+			return "hwupload";
 		case HardwarePipeline.Qsv:
 			return "hwupload";
 		default:
@@ -484,6 +491,22 @@ public static partial class FfmpegCommandTransformer
 			commandLine,
 			"-filter_hw_device\\s+vk\\b",
 			"-filter_hw_device va",
+			RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+	}
+
+	private static string EnsureNamedVaapiDecodeDevice(string commandLine)
+	{
+		if (!commandLine.Contains("-init_hw_device vaapi=va", StringComparison.OrdinalIgnoreCase) ||
+			!commandLine.Contains("-hwaccel vaapi", StringComparison.OrdinalIgnoreCase) ||
+			commandLine.Contains("-hwaccel_device ", StringComparison.OrdinalIgnoreCase))
+		{
+			return commandLine;
+		}
+
+		return Regex.Replace(
+			commandLine,
+			"-hwaccel\\s+vaapi\\b",
+			"-hwaccel vaapi -hwaccel_device va",
 			RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 	}
 

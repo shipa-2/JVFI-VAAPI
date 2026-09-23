@@ -32,7 +32,9 @@ public sealed class VaapiFilterDeviceTests
         Assert.True(result.Applied);
         Assert.Contains("-filter_hw_device va", result.CommandLine, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("-filter_hw_device vk", result.CommandLine, StringComparison.OrdinalIgnoreCase);
-        Assert.Contains("hwupload_vaapi", result.CommandLine, StringComparison.Ordinal);
+        Assert.Contains("-hwaccel vaapi -hwaccel_device va", result.CommandLine, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("framerate=fps=60/1,format=nv12,hwupload", result.CommandLine, StringComparison.Ordinal);
+        Assert.DoesNotContain("hwupload_vaapi", result.CommandLine, StringComparison.Ordinal);
     }
 
     [Fact]

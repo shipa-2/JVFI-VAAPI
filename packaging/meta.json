@@ -1,14 +1,14 @@
 {
   "category": "General",
-  "changelog": "JVFI-VAAPI 0.7.6.3：Software 模式改純 CPU 解碼（避免 AMD amdgpu context lost）；VAAPI 編碼改用 hwupload_vaapi；vk→va 修正擴展。",
+  "changelog": "JVFI-VAAPI 0.7.6.4：framerate 後強制 NV12，使用命名 VAAPI 裝置與通用 hwupload，修正 AMD Tonga invalid VASurfaceID。",
   "description": "JVFI-VAAPI：Jellyfin 伺服器端即時補幀，VAAPI / Jellyfin 12 修正版。",
   "guid": "b8d11789-88f4-4230-befd-9550952780ec",
   "name": "Jellyfin Video Frame Interpolation",
   "overview": "JVFI-VAAPI — Jellyfin Video Frame Interpolation.",
   "owner": "shipa-2",
   "targetAbi": "12.1.0.0",
-  "timestamp": "2026-09-23T18:45:00+00:00",
-  "version": "0.7.6.3",
+  "timestamp": "2026-09-23T20:05:00+00:00",
+  "version": "0.7.6.4",
   "status": "Active",
   "autoUpdate": false,
   "assemblies": []

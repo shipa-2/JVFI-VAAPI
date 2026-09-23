@@ -5,8 +5,8 @@ using System.Runtime.Versioning;
 
 [assembly: AssemblyCompany("Jellyfin Video Frame Interpolation")]
 [assembly: AssemblyConfiguration("Release")]
-[assembly: AssemblyFileVersion("0.7.6.3")]
-[assembly: AssemblyInformationalVersion("0.7.6.3")]
+[assembly: AssemblyFileVersion("0.7.6.4")]
+[assembly: AssemblyInformationalVersion("0.7.6.4")]
 [assembly: AssemblyProduct("Jellyfin Video Frame Interpolation")]
 [assembly: AssemblyTitle("Jellyfin Video Frame Interpolation")]
-[assembly: AssemblyVersion("0.7.6.3")]
+[assembly: AssemblyVersion("0.7.6.4")]

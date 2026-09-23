@@ -4,6 +4,9 @@ dist/
 jellyfin-video-frame-interpolation_*.zip
 *.user
 .vs/
+costura.*
 src/costura.*
 src/Costura/
 src/Jellyfin-Video-Frame-Interpolation_ProcessedByFody.cs
+src/FodyWeavers.xsd
+Jellyfin.Plugin.JVFI.Configuration.configPage.html
