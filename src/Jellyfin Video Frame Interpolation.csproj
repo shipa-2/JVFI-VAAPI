@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Jellyfin Video Frame Interpolation</AssemblyName>
+    <RootNamespace />
+    <LangVersion>13</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <Version>0.7.6.1</Version>
+    <Authors>JVFI fork (VAAPI fix)</Authors>
+    <Description>Fork of SkillGodAk/JVFI with VAAPI hwupload filter device fix for Jellyfin 12 + AMD.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Jellyfin.Controller" Version="12.1.0" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Jellyfin.Plugin.JVFI.Configuration.configPage.html" LogicalName="Jellyfin.Plugin.JVFI.Configuration.configPage.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Costura/**" />
+    <Compile Remove="Jellyfin-Video-Frame-Interpolation_ProcessedByFody.cs" />
+  </ItemGroup>
+</Project>

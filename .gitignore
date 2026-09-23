@@ -1,0 +1,8 @@
+bin/
+obj/
+dist/
+*.user
+.vs/
+src/costura.*
+src/Costura/
+src/Jellyfin-Video-Frame-Interpolation_ProcessedByFody.cs
