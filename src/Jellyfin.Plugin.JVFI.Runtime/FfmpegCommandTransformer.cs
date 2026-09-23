@@ -31,7 +31,12 @@ public static partial class FfmpegCommandTransformer
 		OutputEncoderSelection outputEncoderSelection = OutputEncoderSelector.Select(request.EncoderMode, hardwarePipeline, request.JellyfinHardwarePipeline, text);
 		string commandLine2 = RewriteVideoEncoder(commandLine, match, outputEncoderSelection.Encoder);
 		commandLine2 = EnsureHardwareInitialization(commandLine2, outputEncoderSelection.Pipeline, request.JellyfinQsvDevice);
-		commandLine2 = EnsureFilterHwDeviceForOutputPipeline(commandLine2, outputEncoderSelection.Pipeline);
+		if (outputEncoderSelection.Pipeline == HardwarePipeline.Software)
+		{
+			commandLine2 = EnsureSoftwareDecodePipeline(commandLine2);
+		}
+
+		commandLine2 = EnsureFilterHwDeviceForVaapiFilters(commandLine2);
 		commandLine2 = EnsureMinimum4KBitrate(commandLine2, request, outputEncoderSelection.Encoder);
 		if (!TryBuildInterpolationFilter(commandLine2, request, hardwarePipeline, out string _, out string reason))
 		{
@@ -427,6 +432,7 @@ public static partial class FfmpegCommandTransformer
 		case HardwarePipeline.Cuda:
 			return "hwupload_cuda";
 		case HardwarePipeline.Vaapi:
+			return "hwupload_vaapi";
 		case HardwarePipeline.Qsv:
 			return "hwupload";
 		default:
@@ -465,16 +471,10 @@ public static partial class FfmpegCommandTransformer
 	}
 
 	/// <summary>
-	/// Jellyfin 12 may set <c>-filter_hw_device vk</c> for libplacebo while JVFI ends with CPU filters and
-	/// <c>hwupload</c> before <c>h264_vaapi</c>. Plain <c>hwupload</c> then targets Vulkan and fails to link to VAAPI encode.
+	/// Jellyfin 12 sets <c>-filter_hw_device vk</c> for libplacebo. VAAPI filters (<c>scale_vaapi</c>, <c>hwupload</c>) must use <c>va</c>.
 	/// </summary>
-	private static string EnsureFilterHwDeviceForOutputPipeline(string commandLine, HardwarePipeline outputPipeline)
+	private static string EnsureFilterHwDeviceForVaapiFilters(string commandLine)
 	{
-		if (outputPipeline != HardwarePipeline.Vaapi)
-		{
-			return commandLine;
-		}
-
 		if (!commandLine.Contains("-init_hw_device vaapi=va", StringComparison.OrdinalIgnoreCase))
 		{
 			return commandLine;
@@ -485,6 +485,23 @@ public static partial class FfmpegCommandTransformer
 			"-filter_hw_device\\s+vk\\b",
 			"-filter_hw_device va",
 			RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+	}
+
+	/// <summary>
+	/// Software encode (libx264) with CPU framerate must not touch the GPU — hybrid VAAPI decode caused amdgpu context loss on AMD.
+	/// </summary>
+	private static string EnsureSoftwareDecodePipeline(string commandLine)
+	{
+		string text = commandLine;
+		text = Regex.Replace(text, "-hwaccel\\s+vaapi\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "-hwaccel_output_format\\s+vaapi\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "-filter_hw_device\\s+\\S+\\s*", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "-init_hw_device\\s+vulkan=vk@dr\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "-init_hw_device\\s+vaapi=va@dr\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "-init_hw_device\\s+drm=dr:/dev/dri/renderD128\\s+", string.Empty, RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "scale_vaapi=format=nv12", "format=yuv420p", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		text = Regex.Replace(text, "scale_vaapi=[^,\"]+", "format=yuv420p", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+		return text;
 	}
 
 	private static string EnsureMinimum4KBitrate(string commandLine, FfmpegTransformRequest request, string outputEncoder)

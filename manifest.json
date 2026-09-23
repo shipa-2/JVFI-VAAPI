@@ -9,6 +9,14 @@
     "imageUrl": "https://shipa-2.github.io/JVFI-VAAPI/assets/jvfi-icon.png",
     "versions": [
       {
+        "version": "0.7.6.3",
+        "changelog": "Software 編碼器：純 CPU 解碼路徑，避免 AMD amdgpu context lost；VAAPI 編碼 hwupload_vaapi；filter_hw_device vk→va 用於所有 VAAPI 濾鏡。",
+        "targetAbi": "12.1.0.0",
+        "sourceUrl": "https://github.com/shipa-2/JVFI-VAAPI/releases/download/v0.7.6.3/jellyfin-video-frame-interpolation_0.7.6.3.zip",
+        "checksum": "B19A52C0904A6552A92299A372FCDA8E",
+        "timestamp": "2026-09-23T19:35:00Z"
+      },
+      {
         "version": "0.7.6.2",
         "changelog": "嵌入 0Harmony 至插件 DLL，修正 Jellyfin 12「Resolving to a collectible assembly is not supported」導致 JVFI 掛接失敗；含 VAAPI filter_hw_device 修正。",
         "targetAbi": "12.1.0.0",
